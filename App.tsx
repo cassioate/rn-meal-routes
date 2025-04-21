@@ -7,6 +7,8 @@ import { MealsOverviewScreen } from "./src/screens/MealsOverviewScreen";
 import { MealDetailScreen } from "./src/screens/MealDetailScreen";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { FavoritesScreen } from "./src/screens/FavoritesScreen";
+import React from "react";
+import { FavoritesContextProvider } from "./src/store/context/Favorite-context";
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -66,35 +68,37 @@ export default function App() {
         hidden={false}
         // backgroundColor="white"
       ></StatusBar>
-      <NavigationContainer>
-        <Stack.Navigator
-          screenOptions={{
-            headerStyle: { backgroundColor: "#351401" },
-            headerTintColor: "white",
-            contentStyle: { backgroundColor: "#3f2f25" },
-          }}
-        >
-          <Stack.Screen
-            name="DrawerNavigator"
-            component={DrawerNavigator}
-            options={{
-              headerShown: false,
+      <FavoritesContextProvider>
+        <NavigationContainer>
+          <Stack.Navigator
+            screenOptions={{
+              headerStyle: { backgroundColor: "#351401" },
+              headerTintColor: "white",
+              contentStyle: { backgroundColor: "#3f2f25" },
             }}
-          />
-          <Stack.Screen
-            name="MealsOverviewScreen"
-            component={MealsOverviewScreen}
-          />
-          <Stack.Screen
-            name="MealDetailScreen"
-            options={{ title: "About the Meal" }}
           >
-            {({ navigation, route }: MealsOverviewScreenProps) => (
-              <MealDetailScreen navigation={navigation} route={route} />
-            )}
-          </Stack.Screen>
-        </Stack.Navigator>
-      </NavigationContainer>
+            <Stack.Screen
+              name="DrawerNavigator"
+              component={DrawerNavigator}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="MealsOverviewScreen"
+              component={MealsOverviewScreen}
+            />
+            <Stack.Screen
+              name="MealDetailScreen"
+              options={{ title: "About the Meal" }}
+            >
+              {({ navigation, route }: MealsOverviewScreenProps) => (
+                <MealDetailScreen navigation={navigation} route={route} />
+              )}
+            </Stack.Screen>
+          </Stack.Navigator>
+        </NavigationContainer>
+      </FavoritesContextProvider>
     </>
   );
 }

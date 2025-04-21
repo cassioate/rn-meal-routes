@@ -10,10 +10,11 @@ import { MEALS } from "../data/dummy-data";
 import MealDetails from "../components/MealDetails";
 import Subtitle from "../components/MealDetail/Subtitle";
 import List from "../components/MealDetail/List";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ParamListBase } from "@react-navigation/native";
 import { IconButton } from "../components/IconButton";
+import { FavoritesContext } from "../store/context/Favorite-context";
 
 interface Props {
   mealId?: string;
@@ -22,12 +23,18 @@ interface Props {
 }
 
 export function MealDetailScreen({ route, navigation }: Props) {
-  const mealId = route?.params?.mealId;
+  const favoriteContext = useContext(FavoritesContext);
+
+  const mealId = route?.params?.mealId || "";
 
   const selectedMeal = MEALS.find((meal) => meal.id === mealId);
 
+  const mealIsFavorite = favoriteContext.ids.includes(mealId);
+
   function headerButtonPressHandler() {
-    console.log("Pressed!");
+    mealIsFavorite
+      ? favoriteContext.removeFavorite(mealId)
+      : favoriteContext.addFavorite(mealId);
   }
 
   useEffect(() => {
@@ -35,7 +42,7 @@ export function MealDetailScreen({ route, navigation }: Props) {
       headerRight: () => {
         return (
           <IconButton
-            iconName="star"
+            iconName={mealIsFavorite ? "star" : "star-outline"}
             iconColor="white"
             iconSize={24}
             onPress={headerButtonPressHandler}
