@@ -1,18 +1,49 @@
-import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  Button,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { MEALS } from "../data/dummy-data";
 import MealDetails from "../components/MealDetails";
 import Subtitle from "../components/MealDetail/Subtitle";
 import List from "../components/MealDetail/List";
+import { useEffect } from "react";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { ParamListBase } from "@react-navigation/native";
+import { IconButton } from "../components/IconButton";
 
 interface Props {
-  mealId: string;
-  route?: { params?: { mealId?: string } };
+  mealId?: string;
+  route?: { params?: { mealId?: string } } | undefined;
+  navigation?: NativeStackNavigationProp<ParamListBase, string, undefined>;
 }
 
-export function MealDetailScreen({ route }: Props) {
+export function MealDetailScreen({ route, navigation }: Props) {
   const mealId = route?.params?.mealId;
 
   const selectedMeal = MEALS.find((meal) => meal.id === mealId);
+
+  function headerButtonPressHandler() {
+    console.log("Pressed!");
+  }
+
+  useEffect(() => {
+    navigation?.setOptions({
+      headerRight: () => {
+        return (
+          <IconButton
+            iconName="star"
+            iconColor="white"
+            iconSize={24}
+            onPress={headerButtonPressHandler}
+          ></IconButton>
+        );
+      },
+    });
+  }, [navigation, headerButtonPressHandler]);
 
   return (
     <ScrollView>

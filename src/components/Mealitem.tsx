@@ -36,7 +36,6 @@ export function MealItem({
     useNavigation<NavigationProp<NavigationPropMealDetailScreen>>();
 
   function selectMealItemHandler() {
-    console.log(id);
     navigation.navigate("MealDetailScreen", { mealId: id });
   }
 
